@@ -79,6 +79,13 @@ func main() {
 
 func copyImages(sourceImage string, destinationRegistryImageMap map[string][]string, registryCredentials map[string]RegistryCredential) error {
 	sourceRegistryCredential := registryCredentials[SOURCE_REGISTRY_CREDENTIAL_KEY]
+	sourceUsername, sourcePassword, err := ExtractCredentialsForRegistry(sourceRegistryCredential)
+	if err != nil {
+		fmt.Printf(err.Error())
+		os.Exit(1)
+	}
+	sourceRegistryCredential.Username = sourceUsername
+	sourceRegistryCredential.Password = sourcePassword
 	for destinationRegistry, destinationImages := range destinationRegistryImageMap {
 		destinationRegistryCredential, ok := registryCredentials[destinationRegistry]
 		if ok {
